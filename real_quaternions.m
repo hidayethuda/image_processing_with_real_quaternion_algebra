@@ -158,10 +158,14 @@ classdef real_quaternions
             M=size(quaternion_to_complex(obj),1);
             N=size(quaternion_to_complex(obj),2);
             [U_c,S_c,V_c] = svd(quaternion_to_complex(obj));
+            zero_element=zeros(size(S_c)/2);
             diagonal_elements = sort(diag(S_c),'descend');
             odd_index_elements = diagonal_elements(1:2:end);
             real_part = diag(odd_index_elements);
-            S=real_quaternions(real_part,zeros(size(S_c)/2),zeros(size(S_c)/2),zeros(size(S_c)/2));
+            [rowsreal_part, colsreal_part] = size(real_part);
+            real_part1=zero_element;
+            real_part1(1:rowsreal_part, 1:colsreal_part) = real_part;
+            S=real_quaternions(real_part1,zero_element,zero_element,zero_element);
             U_c(:, 2:2:end) = [];
             V_c(:, 2:2:end) = [];
             U=real_quaternions(real(U_c(1:M/2,1:M/2)),imag(U_c(1:M/2,1:M/2)),real(-conj(U_c((M/2)+1:M,1:M/2))),imag(-conj(U_c((M/2)+1:M,1:M/2))));
